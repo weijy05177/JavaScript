@@ -20,3 +20,17 @@ $ git cherry-pick 4c805e2
 [master 1d4b803] fix bug 101
  1 file changed, 1 insertion(+), 1 deletion(-)
 Git自动给dev分支做了一次提交，注意这次提交的commit是1d4b803，它并不同于master的4c805e2，因为这两个commit只是改动相同，但确实是两个不同的commit。用git cherry-pick，我们就不需要在dev分支上手动再把修bug的过程重复一遍。
+
+现在，你的小伙伴要在dev分支上开发，就必须创建远程origin的dev分支到本地，于是他用这个命令创建本地dev分支：
+$ git checkout -b dev origin/dev
+$ git push origin dev
+
+解决办法也很简单，Git已经提示我们，先用git pull把最新的提交从origin/dev抓下来，然后，在本地合并，解决冲突，再推送。
+git pull也失败了，原因是没有指定本地dev分支与远程origin/dev分支的链接，根据提示，设置dev和origin/dev的链接：
+$ git branch --set-upstream-to=origin/dev dev
+
+这回git pull成功，但是合并有冲突，需要手动解决，解决的方法和分支管理中的解决冲突完全一样。解决后，提交，再push：
+$ git commit -m "fix env conflict"
+[dev 57c53ab] fix env conflict
+$ git push origin dev
+
